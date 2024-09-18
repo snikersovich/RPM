@@ -1,0 +1,20 @@
+class Logger:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Logger, cls).__new__(cls)
+        return cls._instance
+
+    def log(self, message: str):
+        print(f"{message}")
+
+
+if __name__ == "__main__":
+    logger1 = Logger()
+    logger1.log("Это первое сообщение лога.")
+
+    logger2 = Logger()
+    logger2.log("Это второе сообщение лога.")
+
+    print(f"logger1 и logger2 - это один и тот же объект: {logger1 is logger2}")
