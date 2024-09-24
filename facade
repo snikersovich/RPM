@@ -1,0 +1,55 @@
+class LightingSystem:
+    def turn_on(self):
+        print("Освещение включено.")
+
+    def turn_off(self):
+        print("Освещение выключено.")
+
+
+class TemperatureControl:
+    def set_temperature(self, temperature):
+        print(f"Температура установлена на {temperature} градусов.")
+
+    def turn_off(self):
+        print("Система отопления выключена.")
+
+
+class SecuritySystem:
+    def activate(self):
+        print("Система безопасности активирована.")
+
+    def deactivate(self):
+        print("Система безопасности деактивирована.")
+
+
+class SmartHomeFacade:
+    def __init__(self):
+        self.lighting_system = LightingSystem()
+        self.temperature_control = TemperatureControl()
+        self.security_system = SecuritySystem()
+
+    def toggle_home(self, state, temperature=None):
+        if state == "on":
+            self.lighting_system.turn_on()
+            if temperature is not None:
+                self.temperature_control.set_temperature(temperature)
+            self.security_system.activate()
+            print("Умный дом включен.")
+        elif state == "off":
+            self.lighting_system.turn_off()
+            self.temperature_control.turn_off()
+            self.security_system.deactivate()
+            print("Умный дом выключен.")
+        else:
+            print("Неверное состояние. Используйте 'on' или 'off'.")
+
+
+def main():
+    smart_home = SmartHomeFacade()
+    smart_home.toggle_home("on", temperature=22)
+    print()
+    smart_home.toggle_home("off")
+
+
+if __name__ == "__main__":
+    main()
