@@ -1,0 +1,51 @@
+from abc import ABC, abstractmethod
+
+
+class GameCharacter(ABC):
+    @abstractmethod
+    def attack(self):
+        pass
+
+
+class Warrior(GameCharacter):
+    def attack(self):
+        return "Воин наносит удар мечом!"
+
+
+class Mage(GameCharacter):
+    def attack(self):
+        return "Маг использует огненное заклинание!"
+
+
+class Archer(GameCharacter):
+    def attack(self):
+        return "Лучник стреляет из лука!"
+
+
+class CharacterFactory:
+    @staticmethod
+    def create_character(character_type: str) -> GameCharacter:
+        if character_type.lower() == 'войн':
+            return Warrior()
+        elif character_type.lower() == 'маг':
+            return Mage()
+        elif character_type.lower() == 'лучник':
+            return Archer()
+        else:
+            raise ValueError("Неизвестный тип персонажа: {}".format(character_type))
+
+
+def main():
+    print("Выберите персонажа (войн, маг, лучник):")
+    character_type = input().strip()
+
+    try:
+        character = CharacterFactory.create_character(character_type)
+        print(f"Вы выбрали: {character_type.capitalize()}")
+        print(character.attack())
+    except ValueError as e:
+        print(e)
+
+
+if __name__ == "__main__":
+    main()
