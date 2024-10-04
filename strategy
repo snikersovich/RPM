@@ -1,0 +1,75 @@
+from abc import ABC, abstractmethod
+
+
+class DeliveryStrategy(ABC):
+    @abstractmethod
+    def calculate_cost(self, distance: float, weight: float) -> float:
+        pass
+
+
+class CourierDelivery(DeliveryStrategy):
+    def calculate_cost(self, distance: float, weight: float) -> float:
+        base_cost = 5.0
+        cost_per_km = 1.0
+        cost_per_kg = 0.5
+        total_cost = base_cost + (cost_per_km * distance) + (cost_per_kg * weight)
+        return total_cost
+
+
+class PostalDelivery(DeliveryStrategy):
+    def calculate_cost(self, distance: float, weight: float) -> float:
+        base_cost = 3.0
+        cost_per_km = 0.7
+        cost_per_kg = 0.3
+        total_cost = base_cost + (cost_per_km * distance) + (cost_per_kg * weight)
+        return total_cost
+
+
+class DroneDelivery(DeliveryStrategy):
+    def calculate_cost(self, distance: float, weight: float) -> float:
+        base_cost = 10.0
+        cost_per_km = 2.0
+        cost_per_kg = 0.4
+        total_cost = base_cost + (cost_per_km * distance) + (cost_per_kg * weight)
+        return total_cost
+
+
+class DeliveryContext:
+    def __init__(self, strategy: DeliveryStrategy):
+        self._strategy = strategy
+
+    def set_strategy(self, strategy: DeliveryStrategy):
+        self._strategy = strategy
+
+    def calculate_cost(self, distance: float, weight: float) -> float:
+        return self._strategy.calculate_cost(distance, weight)
+
+
+def main():
+    print("Выберите стратегию доставки:")
+    print("1. Курьерская доставка")
+    print("2. Почтовая доставка")
+    print("3. Доставка дронами")
+
+    choice = int(input("Введите номер выбранной стратегии (1/2/3): "))
+    distance = float(input("Введите расстояние (в км): "))
+    weight = float(input("Введите вес (в кг): "))
+
+    context = DeliveryContext(None)
+
+    if choice == 1:
+        context.set_strategy(CourierDelivery())
+    elif choice == 2:
+        context.set_strategy(PostalDelivery())
+    elif choice == 3:
+        context.set_strategy(DroneDelivery())
+    else:
+        print("Некорректный выбор.")
+        return
+
+    cost = context.calculate_cost(distance, weight)
+    print(f"Стоимость доставки: {cost:.2f} руб.")
+
+
+if __name__ == "__main__":
+    main()
