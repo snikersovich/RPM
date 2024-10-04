@@ -1,0 +1,67 @@
+from abc import ABC, abstractmethod
+
+
+class PaymentMethod(ABC):
+    @abstractmethod
+    def pay(self, amount: float) -> str:
+        pass
+
+
+class CreditCardPayment(PaymentMethod):
+    def pay(self, amount: float) -> str:
+        return f"Оплата {amount} руб. выполнена с помощью кредитной карты."
+
+
+class EWalletPayment(PaymentMethod):
+    def pay(self, amount: float) -> str:
+        return f"Оплата {amount} руб. выполнена с помощью электронного кошелька."
+
+
+class PaymentPlatform(ABC):
+    def __init__(self, payment_method: PaymentMethod):
+        self.payment_method = payment_method
+
+    @abstractmethod
+    def execute_payment(self, amount: float) -> str:
+        pass
+
+
+class MobileAppPlatform(PaymentPlatform):
+    def execute_payment(self, amount: float) -> str:
+        return f"Мобильное приложение: {self.payment_method.pay(amount)}"
+
+
+class WebPlatform(PaymentPlatform):
+    def execute_payment(self, amount: float) -> str:
+        return f"Веб-сайт: {self.payment_method.pay(amount)}"
+
+
+def main():
+    # Выбор метода оплаты
+    payment_method_choice = input("Выберите способ оплаты (1 - Кредитная карта, 2 - Электронный кошелек): ")
+    amount = float(input("Введите сумму для оплаты: "))
+
+    if payment_method_choice == '1':
+        payment_method = CreditCardPayment()
+    elif payment_method_choice == '2':
+        payment_method = EWalletPayment()
+    else:
+        print("Неверный выбор способа оплаты.")
+        return
+
+    platform_choice = input("Выберите платформу (1 - Мобильное приложение, 2 - Веб-сайт): ")
+
+    if platform_choice == '1':
+        platform = MobileAppPlatform(payment_method)
+    elif platform_choice == '2':
+        platform = WebPlatform(payment_method)
+    else:
+        print("Неверный выбор платформы.")
+        return
+
+    result = platform.execute_payment(amount)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()
