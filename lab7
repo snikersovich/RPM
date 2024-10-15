@@ -1,0 +1,67 @@
+import sys
+from PyQt6.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QLabel
+)
+
+
+class CurrencyConverter(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Конвертер валют")
+        self.resize(300, 200)
+        layout = QVBoxLayout()
+
+        self.ruble_input = QLineEdit()
+        self.ruble_input.setPlaceholderText("Введите сумму в рублях")
+        layout.addWidget(self.ruble_input)
+
+        self.usd_button = QPushButton("Конвертировать в Доллары")
+        self.usd_button.clicked.connect(self.convert_to_usd)
+        layout.addWidget(self.usd_button)
+
+        self.euro_button = QPushButton("Конвертировать в Евро")
+        self.euro_button.clicked.connect(self.convert_to_euro)
+        layout.addWidget(self.euro_button)
+
+        self.gbp_button = QPushButton("Конвертировать в Фунты")
+        self.gbp_button.clicked.connect(self.convert_to_gbp)
+        layout.addWidget(self.gbp_button)
+
+        self.setLayout(layout)
+
+    def convert_to_usd(self):
+        amount = self._get_amount()
+        if amount is not None:
+            converted = amount * 0.013
+            self._show_message("Доллары", converted)
+
+    def convert_to_euro(self):
+        amount = self._get_amount()
+        if amount is not None:
+            converted = amount * 0.012
+            self._show_message("Евро", converted)
+
+    def convert_to_gbp(self):
+        amount = self._get_amount()
+        if amount is not None:
+            converted = amount * 0.011
+            self._show_message("Фунты", converted)
+
+    def _get_amount(self):
+        try:
+            amount = float(self.ruble_input.text())
+            return amount
+        except ValueError:
+            QMessageBox.warning(self, "Ошибка", "Пожалуйста, введите корректное число.")
+            return None
+
+    def _show_message(self, currency, converted_amount):
+        QMessageBox.information(self, f"Конвертация в {currency}",
+                                f"Сумма в {currency}: {converted_amount:.2f}")
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    converter = CurrencyConverter()
+    converter.show()
+    sys.exit(app.exec())
