@@ -1,0 +1,31 @@
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout
+
+
+class ClickerApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.count = 0
+        self.label = QLabel(f'Количество кликов: {self.count}', self)
+        self.button = QPushButton('Кликни меня!', self)
+        self.button.clicked.connect(self.increment_count)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.button)
+
+        self.setLayout(layout)
+
+        self.setWindowTitle('Кликер')
+        self.setGeometry(100, 100, 300, 200)
+
+    def increment_count(self):
+        self.count += 1
+        self.label.setText(f'Количество кликов: {self.count}')
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_window = ClickerApp()
+    main_window.show()
+    sys.exit(app.exec())
